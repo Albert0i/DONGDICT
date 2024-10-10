@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Welcome</title>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+    <div class="text-center">
+        <h1 class="text-4xl font-bold">Welcome to the Online Dictionary</h1>
+        <form action="/main" method="post" class="mt-4">
+            <input type="text" name="word" class="border border-gray-300 p-2 w-64" placeholder="Enter a prefix" autofocus required>
+            <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Search</button>
+        </form>
+    </div>
+</body>
+</html>

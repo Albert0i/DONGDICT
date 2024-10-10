@@ -1,0 +1,21 @@
+{
+  "name": "dongdict",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/app.js",
+    "start": "node src/app.js",
+    "redis": "start \"redis server\" /MIN redis-server ./redis/conf/redis.conf"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "ioredis": "^5.4.1"
+  }
+}
