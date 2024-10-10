@@ -7,7 +7,8 @@ const router = express.Router();
 export default (redis) => {
     // Welcome Page
     router.get('/', async (req, res) => {
-        res.render('welcome');
+        const dbsize = await redisClient.dbsize()
+        res.render('welcome', { dbsize });
     });
 
     // Main Page - List prefix-matched words

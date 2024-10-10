@@ -9,10 +9,17 @@
 <body class="flex items-center justify-center h-screen bg-gray-100">
     <div class="text-center">
         <h1 class="text-4xl font-bold">Welcome to the Online Dictionary</h1>
+        <h3 class="text-1xl font-bold text-gray-500">In the sea of knowledge <%= dbsize %> means nothing...</h3>
         <form action="/main" method="post" class="mt-4">
             <input type="text" name="word" class="border border-gray-300 p-2 w-64" placeholder="Enter a prefix" autofocus required>
             <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-2 rounded">Search</button>
         </form>
+
+        <h2 class="text-lg font-semibold mt-6">Credits</h2>
+        <p>
+            This application utilizes advanced AI technology for providing information and assistance. 
+            Special thanks to <a href="https://www.openai.com" class="text-blue-500 underline">OpenAI</a> for their contributions.
+        </p>
     </div>
 </body>
 </html>
