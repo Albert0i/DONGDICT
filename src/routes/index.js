@@ -13,7 +13,7 @@ export default (redis) => {
 
     // Main Page - List prefix-matched words
     router.post('/main', async (req, res) => {
-        const searchTerm = req.body.word.toLowerCase();
+        const searchTerm = req.body.word.toLowerCase().trim();
         const matchedWords = await redisClient.keys(`DONGDICT:${searchTerm}*`); // Fetch keys matching the prefix
         const words = matchedWords.map(word => word.replace(/^DONGDICT:/, ''));
         
