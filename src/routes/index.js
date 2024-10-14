@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import express from 'express';
 import { redisClient } from '../redis/redisClient.js';
 
@@ -8,7 +9,7 @@ export default (redis) => {
     // Welcome Page
     router.get('/', async (req, res) => {
         await redisClient.ping()
-        res.render('welcome');
+        res.render('welcome', { dbsize: process.env.DBSIZE });
     });
 
     // Main Page - List prefix-matched words
