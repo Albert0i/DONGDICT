@@ -97,6 +97,8 @@ Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are idea
 ### VI. Who wrote this app? 
 Dreams which I have yearned so long suddenly becomes palpable. 
 
+![alt Dong Dict](img/DongDict.JPG)
+
 
 ### VII. Bibliography
 1. [東周列國志](http://www.open-lit.com/book.php?bid=20)
