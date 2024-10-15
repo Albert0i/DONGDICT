@@ -18,7 +18,7 @@ The following defines a **synonym group**:
 |wordC
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque, pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
 
-wordA, wordB and wordC shares the same description. There was no way to prevent from inputting duplicated entry. 
+wordA, wordB and wordC shared the same description. There was no way to prevent from inputting duplicated entry. 
 
 
 ### II. An early attempt
@@ -31,14 +31,64 @@ In the year of 2012, I was thinking to make a web site to enable dictionary look
 For reason of so and so, this idea was suspended; for reason of such and such, this idea was soon abandoned. 
 
 ### III. On second thought
+The simplest way to implement a dictionary is via a table in RDBMS:
+```
+CREATE TABLE dictionary (
+    word VARCHAR(80) PRIMARY KEY,
+    description TEXT NOT NULL
+);
+```
+
+Duplicated words are rejected because it violates primary key constraint. We have two ways to handle duplicated entry: 
+1. Keep the first description by ignoring the last; 
+2. Keep the last description by overwriting the first; 
+
+Some RDBMS has [UPSERT](https://www.cockroachlabs.com/blog/sql-upsert/) command while others provides `INSERT … ON DUPLICATE KEY UPDATE` or similar construct so that it's *not* necessary to check existence first. 
+
+To keep the first, we can this in MySQL 8: 
+```
+INSERT INTO dictionary (word, description)
+VALUES ("word", 'Lorem ipsum dolor sit amet consectetur adipisicing elit.')
+ON DUPLICATE KEY UPDATE word = word;
+```
+
+To keep the last, we can this in MySQL 8: 
+```
+INSERT INTO dictionary (word, description)
+VALUES ('word', 'Lorem ipsum dolor sit amet consectetur adipisicing elit.')
+ON DUPLICATE KEY UPDATE
+description = VALUES(description)
+```
+
+As of synonym group, the basic idea is by spliting the group into independent entries each with the same description. 
+
 
 ### IV. From then to now...
+To keep the last, we can this in Redis: 
+```
+HSET "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+```
+
+[HSET](https://redis.io/docs/latest/commands/hset/) sets the specified fields to their respective values in the hash stored at key. To keep the first, we can this in Redis: 
+```
+HSETNX "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
+```
+
+[HSETNX](https://redis.io/docs/latest/commands/hsetnx/) sets field in the hash stored at key to value, only if field does not yet exist. If key does not exist, a new key holding a hash is created. If field already exists, this operation has no effect.
+
+Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are ideal for fast data ingestion.  
+
 
 ### V. New approach
+1. Convert text file into json format 
+2. Convert json data into redis command 
+
 
 ### VI. Bibliography
 1. [東周列國志](http://www.open-lit.com/book.php?bid=20)
+2. [Upsert in SQL: What is an upsert, and when should you use one?](https://www.cockroachlabs.com/blog/sql-upsert/)
 2. [The Adolescent by Fyodor Dostoevsky](https://www.holybooks.com/wp-content/uploads/The-Adolescent-by-Fyodor-Dostoevsky.pdf)
+
 
 ### Epilogue 
 
