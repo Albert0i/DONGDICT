@@ -8,15 +8,22 @@ In the year of 2011, I began with the chinese historical novel **Dong Zhou Lie G
 ### I. The manuscript 
 Each entry started with a **pipe** character "|" which immediately followed description on the next line, ie: 
 
+```
 |word
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque, pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, 
+placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque, 
+pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
+```
 
 The following defines a **synonym group**:
-
+```
 |wordA
 |wordB
 |wordC
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque, pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
+Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, 
+placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque, 
+pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
+```
 
 wordA, wordB and wordC shared the same description. There was no way to prevent from inputting duplicated entry. 
 
