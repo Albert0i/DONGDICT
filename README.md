@@ -38,7 +38,7 @@ In the year of 2012, I was thinking to make a web site to enable dictionary look
 For reason of so and so, this idea was suspended; for reason of such and such, this idea was soon abandoned. 
 
 ### III. On second thought
-The simplest way to implement a dictionary is via a table in RDBMS:
+The simplest approach to implement a dictionary is create a table in RDBMS: 
 ```
 CREATE TABLE dictionary (
     word VARCHAR(80) PRIMARY KEY,
@@ -46,37 +46,38 @@ CREATE TABLE dictionary (
 );
 ```
 
-Duplicated words are rejected because it violates primary key constraint. We have two ways to handle duplicated entry: 
+Duplicated words are rejected as it violates primary key constraint. However, there are two ways to handle duplicated entries: 
 1. Keep the first description by ignoring the last; 
 2. Keep the last description by overwriting the first; 
 
 Some RDBMS has [UPSERT](https://www.cockroachlabs.com/blog/sql-upsert/) command while others provides `INSERT … ON DUPLICATE KEY UPDATE` or similar construct so that it's *not* necessary to check existence first. 
 
-To keep the first, we can this in MySQL 8: 
+To keep the first, we do this in MySQL 8: 
 ```
 INSERT INTO dictionary (word, description)
 VALUES ("word", 'Lorem ipsum dolor sit amet consectetur adipisicing elit.')
 ON DUPLICATE KEY UPDATE word = word;
 ```
 
-To keep the last, we can this in MySQL 8: 
+To keep the last, we do this in MySQL 8: 
 ```
 INSERT INTO dictionary (word, description)
 VALUES ('word', 'Lorem ipsum dolor sit amet consectetur adipisicing elit.')
-ON DUPLICATE KEY UPDATE
-description = VALUES(description)
+ON DUPLICATE KEY UPDATE description = VALUES(description)
 ```
 
-As of synonym group, the basic idea is by spliting the group into independent entries each with the same description. 
+As for **synonym group**, the idea is to split them into independent entries and each with identical description. 
 
 
 ### IV. From then to now...
-To keep the last, we can this in Redis: 
+
+
+To keep the last, we do this in Redis: 
 ```
 HSET "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
 ```
 
-[HSET](https://redis.io/docs/latest/commands/hset/) sets the specified fields to their respective values in the hash stored at key. To keep the first, we can this in Redis: 
+[HSET](https://redis.io/docs/latest/commands/hset/) sets the specified fields to their respective values in the hash stored at key. To keep the first, we do this in Redis: 
 ```
 HSETNX "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
 ```
