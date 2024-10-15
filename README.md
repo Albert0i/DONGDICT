@@ -2,12 +2,11 @@
 
 
 ### Prologue
-In the year of 2011, I began with the chinese historical novel **Dong Zhou Lie Guo Zhi** (東周列國志) which is a voluminous piece of writing. On 2013/05/13, I finished with the first read and on 2017/10/13 the second read. During the years, characters, events, locations and terms were jotted down in text format, ie. hundreds and thousands of entries in a file of 23.0 MB (24,199,940 bytes). 
+In the year of 2011, I began to read the chinese historical novel **Dong Zhou Lie Guo Zhi** ([東周列國志](http://www.open-lit.com/book.php?bid=20)). On 2013/05/13, I finished the first read and on 2017/10/13 the second read. During the passed years, numerous characters, events, locations and terms were jotted down, ie. hundreds and thousands of entries in a text file of 23.0 MB (24,199,940 bytes). 
 
 
 ### I. The manuscript 
-Each entry started with a **pipe** character "|" which immediately followed description on the next line, ie: 
-
+Each entry starts with a **pipe** character "|" which immediately followed by description on the next line, ie: 
 ```
 |word
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, 
@@ -15,7 +14,7 @@ placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque,
 pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
 ```
 
-The following defines a **synonym group**:
+The following indicates a **synonym group**:
 ```
 |wordA
 |wordB
@@ -25,11 +24,11 @@ placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque,
 pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
 ```
 
-wordA, wordB and wordC shared the same description. There was no way to prevent from inputting duplicated entry. 
+wordA, wordB and wordC shares the same description. There was no way to prevent from inputting duplicated entries. 
 
 
 ### II. An early attempt
-In the year of 2012, I was thinking to make a web site to enable dictionary look up. My idea was to statically generate an index.html and one html page for each entry, so that I could host the static web site easily. A regular re-generation is necessary to update the site. 
+In the year of 2012, I was thinking to make a web site to enable the dictionary look up . My idea was to statically generate an `index.html` and as many html pages as number of entries. All files were hosted in a static web site. Regular re-generation was required to update the web stie. 
 
 ![alt eary attempt 1](img/earlyAttempt-1.JPG)
 
@@ -38,7 +37,7 @@ In the year of 2012, I was thinking to make a web site to enable dictionary look
 For reason of so and so, this idea was suspended; for reason of such and such, this idea was soon abandoned. 
 
 ### III. On second thought
-The simplest approach to implement a dictionary is create a table in RDBMS: 
+The simplest approach to implement a dictionary is create a table using RDBMS: 
 ```
 CREATE TABLE dictionary (
     word VARCHAR(80) PRIMARY KEY,
@@ -70,7 +69,7 @@ As for **synonym group**, the idea is to split them into independent entries and
 
 
 ### IV. From then to now...
-
+Redis Hash is my favourite data structure, a comfort zone for RDBMS immigrants. 
 
 To keep the last, we do this in Redis: 
 ```
@@ -87,17 +86,24 @@ HSETNX "word" description "Lorem ipsum dolor sit amet consectetur adipisicing el
 Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are ideal for fast data ingestion.  
 
 
-### V. New approach
-1. Convert text file into json format 
-2. Convert json data into redis command 
+### V. Data conversion
+1. Convert text file into json format; 
+2. Convert json data into redis `HSET` command; 
+3. Use [Redis Insight](https://redis.io/insight/) `Bulk Actions` to upload; 
+
+![alt Bulk Action](img/BulkActions.JPG)
 
 
-### VI. Bibliography
+### VI. Who wrote this app? 
+
+
+### VII. Bibliography
 1. [東周列國志](http://www.open-lit.com/book.php?bid=20)
 2. [Upsert in SQL: What is an upsert, and when should you use one?](https://www.cockroachlabs.com/blog/sql-upsert/)
 2. [The Adolescent by Fyodor Dostoevsky](https://www.holybooks.com/wp-content/uploads/The-Adolescent-by-Fyodor-Dostoevsky.pdf)
 
 
 ### Epilogue 
+
 
 ### EOF (2024/10/18)
