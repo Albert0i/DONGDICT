@@ -127,9 +127,9 @@ Hooray! Long yearned dreams suddenly becaomes palpable...
 ### VI. Dockerization
 ![alt make](img/make.JPG)
 
-[Dockerfile](./Dockerfile)
-[docker-compose.yml](./docker-compose.yml)
-[Makefile](./Makefile)
+- [Dockerfile](./Dockerfile)
+- [docker-compose.yml](./docker-compose.yml)
+- [Makefile](./Makefile)
 
 
 ### VII. Bibliography
