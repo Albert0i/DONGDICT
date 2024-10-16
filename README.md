@@ -124,7 +124,15 @@ Hooray! Long yearned dreams suddenly becaomes palpable...
 [Click to open](https://dongdict.onrender.com/)
 
 
-### VI. Bibliography
+### VI. Dockerization
+![alt make](img/make.JPG)
+
+[Dockerfile](./Dockerfile)
+[docker-compose.yml](./docker-compose.yml)
+[Makefile](./Makefile)
+
+
+### VII. Bibliography
 1. [東周列國志](http://www.open-lit.com/book.php?bid=20)
 2. [中國哲學書電子化計劃](https://ctext.org/zh)
 3. [粵語審音配詞字庫](https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/)
