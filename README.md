@@ -84,7 +84,7 @@ We didn't tackle the **synonym group** yet but the idea is to split them into in
 
 
 ### IV. From then to now...
-In the year of 2024, I came across Redis. I was dumbfounded at how it work and operate. Beging my favourite data structure, [Hashes](https://redis.io/docs/latest/develop/data-types/hashes/) is comfort zone for RDBMS immigrants. It is super fast in and super easy to use. The downside of it is that all values are string and can't have nested structure. 
+In the year of 2024, I came across Redis. I was dumbfounded at how it work and operate. Being my favourite data structure, [Hashes](https://redis.io/docs/latest/develop/data-types/hashes/) is comfort zone for RDBMS immigrants. It is super fast in and super easy to use. The downside of it is that all values are string and can't have nested structure. 
 
 To cope with duplicated entries. Use this to keep the last: 
 ```
