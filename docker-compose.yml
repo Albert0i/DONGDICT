@@ -1,0 +1,37 @@
+version: "3"
+
+services:
+  # app
+  app:
+    build: 
+      context: .
+    image: 
+      ${IMAGE_NAME}:${IMAGE_VERSION}
+    container_name:
+      app
+    ports:
+      - 3000:3000
+    command:
+      ["node.exe",  "c:\\app\\src\\app.js"]
+    volumes:
+      - ${CONFIG_DIR}\data:c:\app\data
+    depends_on:
+        - redis
+
+  # redis
+  redis:
+    image: 
+      ${REDIS}
+    container_name: 
+      redis
+    ports:
+      - 7000:7000
+    command: 
+      ["redis-server",  "c:\\conf\\redis.conf"]
+    volumes:
+      - ${CONFIG_DIR}\redis\conf:c:\conf:ro
+      - ${CONFIG_DIR}\redis\data:c:\data\redis\data:rw
+
+#
+# EOF (2024/10/18)
+#
