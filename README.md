@@ -113,7 +113,6 @@ Time complexity is O(N) where N is the size of the hash.
 
 
 ### V. Who wrote the code? 
-Dreams which I have yearned so long suddenly becomes palpable. 
 Long yearned dreams suddenly becaomes palpable. 
 
 1. Convert text file into json format; 
