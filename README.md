@@ -2,11 +2,11 @@
 
 
 ### Prologue
-In the year of 2011, I began to read the chinese historical novel **Dong Zhou Lie Guo Zhi** ([東周列國志](http://www.open-lit.com/book.php?bid=20)). On 2013/05/13, I finished the first read and on 2017/10/13 the second read. During the passed years, numerous characters, events, locations and terms were jotted down, ie. hundreds and thousands of entries in a text file of 23.0 MB (24,199,940 bytes). 
+In the year of 2011, for some *untold* reason I began with the voluminous chinese historical novel **Dong Zhou Lie Guo Zhi** ([東周列國志](http://www.open-lit.com/book.php?bid=20)). On 2013/05/13, I managed to finish the first read and on 2017/10/13 I was almost exhausted in the second read. During the passed years, numerous protagonists, supporting characters, events, geographical locations and various kinds of terms were jotted down in hundreds and thousands of entries in a text file of 23.0 MB (24,199,940 bytes) in size. 
 
 
 ### I. The manuscript 
-Each entry starts with a **pipe** character "|" which immediately followed by description on the next line, ie: 
+To begin with, I have to remark the format of manuscript. Each entry starts with a **pipe** character "|" which immediately followed by description on the next line, ie: 
 ```
 |word
 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos animi obcaecati, 
@@ -24,17 +24,18 @@ placeat perspiciatis illo, incidunt autem recusandae repudiandae cum doloremque,
 pariatur iusto? Dolorum fugit quas nobis maxime, magnam beatae ex?
 ```
 
-wordA, wordB and wordC shares the same description. There was no way to prevent from inputting duplicated entries. 
+wordA, wordB and wordC shares the same description. Due to the nature of text file, for sure there are duplicated entries. 
 
 
 ### II. An early attempt
-In the year of 2012, I was thinking to make a web site to enable the dictionary look up . My idea was to statically generate an `index.html` and as many html pages as number of entries. All files were hosted in a static web site. Regular re-generation was required to update the web stie. 
+In the year of 2012, I was thinking to make a web site to enable fast look up.  My preliminary idea was to generate as many .html pages as the number of entries statically. Accompanying with an `index.html` which linked all files together. A regular re-generation was required to update web site. I was quite readily to host the web site on my [Windows XP](https://en.wikipedia.org/wiki/Windows_XP). At that time, hosting an publicly accessable website was an expensive activity and let alone the database. 
 
 ![alt eary attempt 1](img/earlyAttempt-1.JPG)
 
 ![alt eary attempt 2](img/earlyAttempt-2.JPG)
 
-For reason of so and so, this idea was suspended; for reason of such and such, this idea was soon abandoned. 
+For reason of so and so, this idea was suspended; for reason of such and such, this idea was soon dissipated but never been abandoned... 
+
 
 ### III. On second thought
 The simplest approach to implement a dictionary is create a table using RDBMS: 
@@ -65,28 +66,56 @@ VALUES ('word', 'Lorem ipsum dolor sit amet consectetur adipisicing elit.')
 ON DUPLICATE KEY UPDATE description = VALUES(description)
 ```
 
-As for **synonym group**, the idea is to split them into independent entries and each with identical description. 
+Use this for prefix search: 
+```
+SELECT word FROM dictionary WHERE word LIKE 'app%' 
+```
+
+Technically speaking, RDBMS organize index in [B-tree](https://en.wikipedia.org/wiki/B-tree). Traversing index tree and scanning the key for a pattern is a time-consuming process. 
+
+![alt BTree](img/BTree.JPG)
+
+```
+SELECT description FROM dictionary WHERE word = 'apple' 
+```
+Time complexity is O(ln N), where O(ln 28792)≈14.81, which means visiting at most 15 node before the word is met of not found. Note that this is only the physical location, subsequent disk I/O is fired to retrieve the description and return according. 
+
+We didn't tackle the **synonym group** yet but the idea is to split them into independent entries and each with identical description. 
 
 
 ### IV. From then to now...
-Redis Hash is my favourite data structure, a comfort zone for RDBMS immigrants. 
+In the year of 2024, I came across Redis. I was dumbfounded at how it work and operate. Beging my favourite data structure, [Hashes](https://redis.io/docs/latest/develop/data-types/hashes/) is comfort zone for RDBMS immigrants. It is super fast in and super easy to use. The downside of it is that all values are string and can't have nested structure. 
 
-To keep the last, we do this in Redis: 
+To cope with duplicated entries. Use this to keep the last: 
 ```
 HSET "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
 ```
 
-[HSET](https://redis.io/docs/latest/commands/hset/) sets the specified fields to their respective values in the hash stored at key. To keep the first, we do this in Redis: 
+[HSET](https://redis.io/docs/latest/commands/hset/) sets the specified fields to their respective values in the hash stored at key. Use this to keep the first: 
 ```
 HSETNX "word" description "Lorem ipsum dolor sit amet consectetur adipisicing elit."
 ```
 
 [HSETNX](https://redis.io/docs/latest/commands/hsetnx/) sets field in the hash stored at key to value, only if field does not yet exist. If key does not exist, a new key holding a hash is created. If field already exists, this operation has no effect.
 
-Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are ideal for fast data ingestion.  
+Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are ideal for fast data ingestion. Technically speaking, Hash is good for exact match and bad for range scan: 
+
+Use this for prefix search: 
+```
+SCAN 0 MATCH "app*" COUNT 1000
+```
+Time complexity is O(1) for every call. O(N) for a complete iteration, including enough command calls for the cursor to return back to 0. N is the number of elements inside the collection.
+
+```
+HGETALL "apple"
+```
+Time complexity is O(N) where N is the size of the hash.
 
 
-### V. Data conversion
+### V. Who wrote the code? 
+Dreams which I have yearned so long suddenly becomes palpable. 
+Long yearned dreams suddenly becaomes palpable. 
+
 1. Convert text file into json format; 
 2. Convert json data into redis `HSET` command; 
 3. Use [Redis Insight](https://redis.io/insight/) `Bulk Actions` to upload; 
@@ -94,19 +123,20 @@ Both `HSET` and `HSETNX` are O(1) for each field/value pair added which are idea
 ![alt Bulk Action](img/BulkActions.JPG)
 
 
-### VI. Who wrote this app? 
-Dreams which I have yearned so long suddenly becomes palpable. 
-
 ![alt Dong Dict](img/DongDict.JPG)
 
 
-### VII. Bibliography
+### VI. Bibliography
 1. [東周列國志](http://www.open-lit.com/book.php?bid=20)
+2. [中國哲學書電子化計劃](https://ctext.org/zh)
+3. [粵語審音配詞字庫](https://humanum.arts.cuhk.edu.hk/Lexis/lexi-can/)
+4. [漢典](https://www.zdic.net/)
+
 2. [Upsert in SQL: What is an upsert, and when should you use one?](https://www.cockroachlabs.com/blog/sql-upsert/)
 2. [The Adolescent by Fyodor Dostoevsky](https://www.holybooks.com/wp-content/uploads/The-Adolescent-by-Fyodor-Dostoevsky.pdf)
 
 
 ### Epilogue 
-
+> 顧人多不能讀史，而無人不能讀稗官。稗官固亦史之支派，特更演繹其詞耳。善讀稗官者，亦可進於讀史，故古人不廢《東周列國》一書，稗官之近正者也。周自平轍東移，下逮呂政，上下五百有餘年之間，列國數十，變故萬端，事緒紛糾，人物龐雜，最為棘目聱牙，其難讀更倍於他史。而一變為稗官，則童穉無不可得讀。夫至童穉皆可讀史，豈非大樂極快之事邪？然世之讀稗官者甚眾，而卒不獲讀史之益者何哉？蓋稗官不過紀事而已，其有智愚忠佞賢奸之行事，與國家之興廢存亡盛衰成敗，雖皆臚列其跡，而與天道之感召，人事之報施，智愚忠佞賢奸計言行事之得失，及其所以盛衰成敗廢興存亡之故，固皆未能有所發明，則讀者於事之初終原委，方且懵焉昧之，又安望其有益於學問之數哉？夫既無與於學問之數，則讀猶不讀，是為無益之書，安用災梨禍棗為？坊友周君，深慮於此，囑予者屢矣。
 
 ### EOF (2024/10/18)
