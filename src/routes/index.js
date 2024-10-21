@@ -14,7 +14,7 @@ export default (redis) => {
         if (authCookie === 'true') {
             res.render('welcome', { dbsize: process.env.DBSIZE });
         }
-        res.render('Login', { message: null } );
+        res.render('login', { message: null } );
     })
 
     // Login 
@@ -31,7 +31,7 @@ export default (redis) => {
                 }).redirect('/');
         } 
         else {
-            res.render('Login', { message: 'Invalid credentials' } );
+            res.render('login', { message: 'Invalid credentials' } );
         }
     });
     
