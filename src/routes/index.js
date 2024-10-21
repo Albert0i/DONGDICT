@@ -23,10 +23,16 @@ export default (redis) => {
         
         if (username === process.env.ADMIN_USERNAME && 
             password === process.env.ADMIN_PASSWORD) {            
-            res.cookie(process.env.AUTH_COOKIE_NAME, 'true', { maxAge: null }); 
-            return res.redirect('/');
-        }         
-        res.render('Login', { message: 'Invalid credentials' } );
+            // Setting a cookie with HttpOnly and Secure flags
+            res.cookie(process.env.AUTH_COOKIE_NAME, 'true', {
+                    httpOnly: true,  // Prevents JavaScript access
+                    secure: true,    // Only sent over HTTPS
+                    maxAge: 24 * 60 * 60 * 1000 // 1 day
+                }).redirect('/');
+        } 
+        else {
+            res.render('Login', { message: 'Invalid credentials' } );
+        }
     });
     
     // Edit page
@@ -36,12 +42,13 @@ export default (redis) => {
 
         if (authCookie === 'true') {
             // Render edit page
-            const definition = await redisClient.hgetall(`DONGDICT:${word}`); // Fetch definition from Redis
-            definition.key = word
-            definition.description = definition.description.replace(/<br\s*\/?>/gi, '\n');
-            res.render('edit', { definition }); 
-            //res.render('detail', { definition });
-
+            let definition = { }
+            if (word) {
+                definition = await redisClient.hgetall(`DONGDICT:${word}`); // Fetch definition from Redis
+                definition.key = word
+                definition.description = definition.description.replace(/<br\s*\/?>/gi, '\n');
+            }            
+            res.render('edit', { definition });             
         } else {
             res.redirect('/');
         }

@@ -5,6 +5,9 @@ REDIS_PORT=7000
 
 PORT=3000
 DBSIZE=28789
+ADMIN_USERNAME=myuser
+ADMIN_PASSWORD=mypassword
+AUTH_COOKIE_NAME=dongdict-auth-token 
 
 
 IMAGE_NAME=albert0i/dongdict
