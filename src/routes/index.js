@@ -69,6 +69,18 @@ export default (redis) => {
         }
     });
 
+    // Delete
+    router.post('/delete', async (req, res) => {        
+        const authCookie = req.cookies[process.env.AUTH_COOKIE_NAME]
+        const { key } = req.body;
+
+        if (authCookie === 'true') {
+            // Delete from Redis...
+            await redisClient.del(`DONGDICT:${key}`)
+        } 
+        res.redirect('/');
+    });
+
     // Logout route
     router.get('/logout', (req, res) => {
         res.clearCookie(process.env.AUTH_COOKIE_NAME);
