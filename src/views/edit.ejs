@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>Dong Dict - Edit Word</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-md mx-auto">
+        <h1 class="text-2xl font-bold mb-4">Edit Word</h1>
+        
+        <form action="/save" method="POST">            
+            <label for="key" class="block mb-2">Word:</label>
+            <input type="text" id="key" name="key" class="border p-2 w-full mb-4 rounded" value="<%= definition.key %>" required autoFocus>
+            
+            <label for="description" class="block mb-2">Description:</label>
+            <textarea id="description" name="description" class="border p-2 w-full mb-4 rounded" required rows="10"><%= definition.description %></textarea>
+
+            <div class="flex justify-between mt-4">
+                <div>
+                    <button type="submit" class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Save</button>
+                
+                    <button type="button" onclick="window.history.back();" class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Go Back</button>
+            
+                    <a href="/" class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded">Back to Search</a>
+                </div>                
+
+                <button type="button" class="mt-2 inline-block bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition" disabled="disabled">Delete</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

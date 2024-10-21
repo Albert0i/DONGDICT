@@ -10,16 +10,25 @@
 <body class="bg-gray-100 p-6">
     <div class="max-w-md mx-auto">
         <h1 class="text-2xl font-bold mb-4">Word Definition</h1>
-        <% if (definition) { %>
-            <h2 class="text-xl font-semibold"><%= definition.word %></h2>
+
+        <% if (definition) { %>            
             <p><strong>Word:</strong> <%= definition.key %></p>
             <p><strong>Description:</strong> <br /> <%- definition.description %></p>%></p>
         <% } else { %>
             <p>Word not found. Please try another.</p>
         <% } %>
 
-        <button onclick="window.history.back();" class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded">Go Back</button>
-        <a href="/" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded">Back to Search</a>
+        <div class="flex justify-between mt-4">
+            <div>
+                <button onclick="window.history.back();" class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Go Back</button>
+        
+                <a href="/" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Back to Search</a>
+            </div>
+            
+            <% if (definition.auth === 'true') { %>
+                <a href="/edit?word=<%= definition.key %>" class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">Edit</a>   
+            <% } %>
+        </div>
     </div>
 </body>
 </html>
