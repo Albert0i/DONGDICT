@@ -28,3 +28,8 @@ async function main() {
 }
 
 main();
+
+/*
+   ioredis 
+   https://github.com/redis/ioredis/blob/main/examples/module.js
+*/
